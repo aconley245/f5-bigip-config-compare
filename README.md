@@ -1,5 +1,3 @@
-Here's a detailed `README.md` file documenting how to use the Python script:
-
 ---
 
 # F5 UCS/QKView Configuration Comparison Script
