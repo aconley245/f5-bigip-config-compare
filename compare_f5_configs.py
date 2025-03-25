@@ -2,6 +2,7 @@ import os
 import re
 import sys
 import tarfile
+import datetime
 from collections import defaultdict
 
 
@@ -81,9 +82,9 @@ def compare_virtual_servers(vs1, vs2):
     all_vs_names = set(vs1.keys()).union(set(vs2.keys()))
     for vs_name in all_vs_names:
         if vs_name not in vs1:
-            discrepancies.append(f"Virtual server '{vs_name}' is missing in the first configuration.")
+            discrepancies.append(f"Virtual server '{vs_name}' is missing in the first configuration.\n")
         elif vs_name not in vs2:
-            discrepancies.append(f"Virtual server '{vs_name}' is missing in the second configuration.")
+            discrepancies.append(f"Virtual server '{vs_name}' is missing in the second configuration.\n")
         else:
             # Compare attributes for the same virtual server
             attributes_1 = vs1[vs_name]
@@ -92,13 +93,13 @@ def compare_virtual_servers(vs1, vs2):
             all_attributes = set(attributes_1.keys()).union(set(attributes_2.keys()))
             for attr in all_attributes:
                 if attr not in attributes_1:
-                    discrepancies.append(f"Attribute '{attr}' in virtual server '{vs_name}' is missing in the first configuration.")
+                    discrepancies.append(f"Attribute '{attr}' in virtual server '{vs_name}' is missing in the first configuration.\n")
                 elif attr not in attributes_2:
-                    discrepancies.append(f"Attribute '{attr}' in virtual server '{vs_name}' is missing in the second configuration.")
+                    discrepancies.append(f"Attribute '{attr}' in virtual server '{vs_name}' is missing in the second configuration.\n")
                 elif attributes_1[attr] != attributes_2[attr]:
                     discrepancies.append(
                         f"Attribute '{attr}' in virtual server '{vs_name}' differs: "
-                        f"'{attributes_1[attr]}' vs '{attributes_2[attr]}'."
+                        f"'{attributes_1[attr]}' vs '{attributes_2[attr]}'.\n"
                     )
 
     return discrepancies
@@ -128,9 +129,17 @@ def main(file1, file2):
     discrepancies = compare_virtual_servers(vs_config_1, vs_config_2)
 
     if discrepancies:
-        print("\nDiscrepancies found:")
-        for discrepancy in discrepancies:
-            print(discrepancy)
+        print("Discrapancy found")
+        # Get current date and time for results file name
+        now = datetime.datetime.now()
+        outputfile = "results-" + now.strftime("%Y-%m-%d-%H:%M.txt")
+        try:
+            with open(outputfile, "x") as f:
+                    for discrepancy in discrepancies:
+                        f.write(discrepancy)
+        except FileExistsError:
+            print("File Already exists.")
+
     else:
         print("\nNo discrepancies found. The configurations are identical.")
 

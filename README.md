@@ -10,6 +10,7 @@ This Python script compares the configured virtual servers between two F5 UCS ba
 - Automatically unpacks UCS or QKView files using the `tarfile` module.
 - Extracts and parses the `bigip.conf` file from the archive.
 - Detects discrepancies between virtual servers in the two configuration files.
+- Writes any discrepancies to a time-stamped results file.
 - Handles temporary file cleanup after execution.
 
 ---
@@ -20,7 +21,7 @@ This Python script compares the configured virtual servers between two F5 UCS ba
 - Python 3.6 or above.
 
 ### Libraries
-- No external libraries are required. All functionality is based on built-in Python modules (`tarfile`, `os`, `sys`, `re`, among others).
+- No external libraries are required. All functionality is based on built-in Python modules (`tarfile`, `os`, `sys`, `re`, `datetime`, among others).
 
 ---
 
@@ -45,7 +46,7 @@ python compare_f5_configs.py <file1> <file2>
 
 ### Example
 ```bash
-python compare_f5_configs.py backup1.ucs backup2.ucs
+python compare_f5_configs.py bigip1.qkview bigip2.qkview
 ```
 
 Upon execution:
@@ -59,10 +60,9 @@ Upon execution:
 ## Output
 
 ### Discrepancies Found
-If discrepancies are identified, the script prints a detailed list of the differences. Example:
+If discrepancies are identified, the script creates a time-stamped results file a detailed list of the differences. Example:
 
 ```
-Discrepancies found:
 Virtual server 'vs_one' is missing in the first configuration.
 Attribute 'ip' in virtual server 'vs_two' differs: '192.168.1.1' vs '192.168.1.2'.
 Attribute 'port' in virtual server 'vs_three' is missing in the second configuration.

@@ -4,6 +4,9 @@
 *.qkview
 *.ucs
 
+# Results files
+results*.txt
+
 # Compiled output
 /dist
 /tmp
